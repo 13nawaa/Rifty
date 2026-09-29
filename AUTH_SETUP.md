@@ -10,6 +10,8 @@
 - Profils, favoris et missions dans `rifty_user_data`, avec RLS limitée au propriétaire et droits explicites.
 - Table et stockage du défi communautaire configurés ; les vidéos publiées sont publiques.
 - SDK JavaScript fixé à `2.117.2`.
+- Réglages du profil réunis dans une fenêtre accessible par la roue dentée ; les modifications sont appliquées avec « Enregistrer ».
+- Pseudos réservés dans `rifty_handles`, uniques sans distinction majuscules/minuscules. 3 à 24 lettres ASCII, chiffres ou `_`. La base impose l’unicité et la propriété ; la communauté utilise le pseudo réservé.
 
 ## Étape restante : envoi des e-mails au public
 
@@ -25,12 +27,14 @@ Documentation : https://supabase.com/docs/guides/auth/auth-smtp
 
 ## Google
 
-Google est masqué tant que son fournisseur n’est pas configuré. Un Gmail peut déjà être utilisé comme adresse e-mail avec un mot de passe Rifty, sous réserve de l’envoi SMTP ci-dessus. Le bouton de connexion Google nécessite un client OAuth Google, à configurer uniquement dans Supabase ; puis `googleEnabled: true` dans le site.
+Google est masqué tant que son fournisseur n’est pas configuré. Le projet Google Cloud Rifty (`triple-zenith-510114-h6`) et l’identité OAuth ont été créés. Le formulaire du client « Rifty Web » est préparé avec l’origine `https://13nawaa.github.io` et le callback `https://yildqtltyqnhazufegro.supabase.co/auth/v1/callback`. L’ID client et son secret doivent être saisis uniquement dans Supabase, jamais dans le dépôt. Il reste à vérifier l’audience Google, le fournisseur actif et une connexion complète avant d’activer `googleEnabled`.
+
+La connexion Google ne demande que l’identité de base (openid, email, profil), aucun accès à la boîte Gmail. Elle ne dépend pas de l’envoi SMTP Rifty. Un Gmail peut aussi servir d’adresse pour un mot de passe Rifty, sous réserve du service SMTP ci-dessus.
 
 ## Données et vérifications
 
 Un profil cloud existant est restauré à la connexion. Les données invitées ne l’écrasent pas. Un nouveau compte sans profil cloud peut reprendre les données locales. Les caches de comptes sont séparés ; les modifications non synchronisées restent dans le cache du compte correspondant. Une déconnexion nettoie le profil affiché et les avis privés locaux.
 
-Vérifications effectuées : scénarios de connexion simulés, récupération conservée lors d’un rafraîchissement de session, isolation de deux utilisateurs par RLS (transaction de test annulée), refus des lectures anonymes de profils, lecture publique du fil communautaire. Aucune alerte de sécurité dans Supabase Advisor au moment du contrôle. La livraison réelle d’e-mails et le parcours complet de confirmation restent à tester après configuration SMTP.
+Vérifications effectuées : scénarios de connexion simulés, récupération conservée lors d’un rafraîchissement de session, isolation de deux utilisateurs par RLS (transaction de test annulée), refus des lectures anonymes de profils, lecture publique du fil communautaire. Les tests des pseudos vérifient le doublon insensible à la casse, les droits du propriétaire, l’annulation des réglages et le changement de compte pendant un enregistrement. Aucune alerte de base de données ; Advisor signale la protection contre les mots de passe compromis désactivée, fonctionnalité réservée au forfait Pro : https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection . Aucun abonnement payant n’a été activé. La livraison réelle d’e-mails et le parcours complet de confirmation restent à tester après configuration SMTP.
 
 Utiliser le site HTTPS publié, pas une URL `file://`, pour les comptes et les liens de confirmation.

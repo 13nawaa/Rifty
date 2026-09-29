@@ -5,7 +5,7 @@
   const client=configured&&window.supabase?window.supabase.createClient(cfg.url,cfg.publishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:'implicit'}}):null;
   const parse=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}};
   const object=value=>value&&typeof value==='object'&&!Array.isArray(value);
-  let mode='signin',session=null,syncTimer=null,syncing=false,ready=false,recovering=false,busy=false,epoch=0,dirty=false,changeVersion=0,confirmationEmail='';
+  let mode='signin',session=null,syncTimer=null,syncing=false,ready=false,recovering=false,busy=false,epoch=0,dirty=false,changeVersion=0,confirmationEmail='',nickname=null;
   const google=byId('google-auth');google.hidden=!cfg.googleEnabled;byId('auth-divider').hidden=!cfg.googleEnabled;byId('auth-email-notice').hidden=!!cfg.emailDeliveryReady;
 
   function message(text,type=''){status.textContent=text;status.dataset.type=type}
@@ -71,10 +71,12 @@
     if(!client||!session||version!==epoch)return;const userId=session.user.id,localVersion=changeVersion;
     try{
       const {data,error}=await client.from('rifty_user_data').select('payload,updated_at').eq('user_id',userId).maybeSingle();
-      if(version!==epoch)return;if(error)throw error;
+      const handle=await client.from('rifty_handles').select('nickname').eq('user_id',userId).maybeSingle();
+      if(version!==epoch)return;if(error)throw error;if(handle.error)throw handle.error;nickname=handle.data?.nickname||null;
       // An existing cloud profile wins unless this account has unsent local edits.
       if(data&&!dirty&&changeVersion===localVersion)applyLocal(data.payload);
-      ready=true;drawSession();
+      const local=payload();local.profile={...local.profile,nickname:nickname||''};applyLocal(local);
+      ready=true;drawSession();document.dispatchEvent(new Event('rifty:profile-ready'));
       if(!data||dirty)await pushCloud();else{stash();updateSyncBadge(true)}
     }catch(error){if(version===epoch){ready=false;updateSyncBadge(false);message('Compte connecté. Synchronisation indisponible pour le moment. Vos données locales sont conservées.','error')}}
   }
@@ -104,14 +106,15 @@
   byId('auth-signout').onclick=()=>runAction(async()=>{clearTimeout(syncTimer);if(dirty)await pushCloud();const {error}=await client.auth.signOut({scope:'local'});if(error)throw error;message('Vous êtes déconnecté.','success')});
   document.addEventListener('rifty:data-change',queuePush);document.addEventListener('accord:favorites',queuePush);
   window.addEventListener('online',()=>{if(session){if(ready)queuePush();else pullCloud(epoch)}});
-  window.RiftyAuth={configured:!!client,client,get session(){return session},open:openDialog};
+  window.RiftyAuth={configured:!!client,client,get session(){return session},get ready(){return ready},get nickname(){return nickname},open:openDialog};
+  document.addEventListener('rifty:nickname-saved',e=>{if(e.detail.userId===session?.user.id){nickname=e.detail.nickname;drawSession();document.dispatchEvent(new Event('rifty:profile-ready'))}});
   document.querySelectorAll('[data-open-account]').forEach(b=>b.onclick=openDialog);
   setMode('signin');
   if(client){
     client.auth.onAuthStateChange((event,next)=>{
       const changed=session?.user.id!==next?.user.id;
       if(changed||event==='INITIAL_SESSION'){
-        epoch++;clearTimeout(syncTimer);ready=false;syncing=false;
+        epoch++;clearTimeout(syncTimer);ready=false;syncing=false;nickname=null;
         if(next)selectAccount(next.user.id);else if(localStorage.getItem('rifty-data-owner'))leaveAccount();
       }
       session=next||null;

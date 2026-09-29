@@ -9,11 +9,11 @@ Rifty est relié au projet Supabase Rifty. La connexion e-mail, la récupératio
 ## Personnalisation
 
 - Logo : `assets/logo-custom.png`, affiché par `<img class="logo-custom">`. Le fichier fourni est utilisé sans modification. En mode sombre, le contraste est inversé par CSS pour conserver sa lisibilité.
-- Profil : pseudo, niveau musical, photo et bannière enregistrés dans `accord-profile` sur le navigateur. Cette clé historique est conservée pour ne pas perdre les données créées avant le rebranding Rifty. Images PNG/JPEG/WebP jusqu’à 8 Mo, redimensionnées avant sauvegarde.
+- Profil : roue dentée sur la bannière pour modifier le pseudo, le niveau, la photo et la bannière dans une seule fenêtre. Le formulaire n’est plus affiché en permanence. Le pseudo doit être réservé avec un compte ; Supabase garantit son unicité sans distinguer les majuscules. `accord-profile` conserve le cache local. Images PNG/JPEG/WebP jusqu’à 8 Mo, redimensionnées avant sauvegarde.
 - Créateurs enregistrés dans Mon Profil : `accord-favorites`. Ils alimentent aussi la statistique « créateurs suivis ».
 - Missions : `accord-missions`, historique daté selon le jour local. 20 XP découverte, 50 XP pratique, 30 XP tutoriel. Nouveau rang tous les 200 XP. Décocher retire les XP de cette mission. Les jours précédents restent comptabilisés.
 - Le niveau musical choisi est distinct du rang XP. Les badges se débloquent selon les actions indiquées dans le profil.
-- Ces données restent sur l’appareil et l’origine du site. Elles ne migrent pas automatiquement entre localhost, l’ancien hébergement et GitHub Pages.
+- En mode invité, ces données restent sur l’appareil et l’origine du site. Avec un compte, profil, favoris et missions sont synchronisés dans Supabase ; les avis privés et les rappels restent locaux.
 
 ## Icônes
 

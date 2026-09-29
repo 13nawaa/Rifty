@@ -89,3 +89,30 @@ grant select on public.rifty_challenge_posts to anon, authenticated;
 grant insert, delete on public.rifty_challenge_posts to authenticated;
 create index if not exists rifty_challenge_posts_user_idx on public.rifty_challenge_posts(user_id);
 create index if not exists rifty_challenge_posts_feed_idx on public.rifty_challenge_posts(challenge_slug, created_at desc);
+
+create table public.rifty_handles (
+ user_id uuid primary key references auth.users(id) on delete cascade,
+ nickname text not null check (nickname ~ '^[A-Za-z0-9_]{3,24}$'),
+ created_at timestamptz not null default now()
+);
+create unique index rifty_handles_nickname_unique on public.rifty_handles (lower(nickname));
+alter table public.rifty_handles enable row level security;
+revoke all on public.rifty_handles from anon, authenticated;
+grant select, insert, update on public.rifty_handles to authenticated;
+create policy "Read own handle" on public.rifty_handles for select to authenticated using ((select auth.uid())=user_id);
+create policy "Claim own handle" on public.rifty_handles for insert to authenticated with check ((select auth.uid())=user_id);
+create policy "Update own handle" on public.rifty_handles for update to authenticated using ((select auth.uid())=user_id) with check ((select auth.uid())=user_id);
+
+create or replace function public.rifty_set_post_author()
+returns trigger language plpgsql security invoker set search_path = '' as $$
+declare registered_name text;
+begin
+ select nickname into registered_name from public.rifty_handles where user_id = (select auth.uid());
+ if registered_name is null then raise exception 'Choisissez votre pseudo avant de publier.'; end if;
+ new.display_name := registered_name;
+ return new;
+end $$;
+revoke all on function public.rifty_set_post_author() from public, anon, authenticated;
+grant execute on function public.rifty_set_post_author() to authenticated;
+create trigger rifty_post_author before insert on public.rifty_challenge_posts
+for each row execute function public.rifty_set_post_author();
