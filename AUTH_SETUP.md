@@ -27,7 +27,7 @@ Documentation : https://supabase.com/docs/guides/auth/auth-smtp
 
 ## Google
 
-Google est masqué tant que son fournisseur n’est pas configuré. Le projet Google Cloud Rifty (`triple-zenith-510114-h6`) et l’identité OAuth ont été créés. Le formulaire du client « Rifty Web » est préparé avec l’origine `https://13nawaa.github.io` et le callback `https://yildqtltyqnhazufegro.supabase.co/auth/v1/callback`. L’ID client et son secret doivent être saisis uniquement dans Supabase, jamais dans le dépôt. Il reste à vérifier l’audience Google, le fournisseur actif et une connexion complète avant d’activer `googleEnabled`.
+Google OAuth est activé dans Supabase avec le client « Rifty Web ». L’origine est `https://13nawaa.github.io` et le callback est `https://yildqtltyqnhazufegro.supabase.co/auth/v1/callback`. Le secret reste uniquement dans Supabase et n’est jamais ajouté au dépôt. Le bouton Google est actif sur le site.
 
 La connexion Google ne demande que l’identité de base (openid, email, profil), aucun accès à la boîte Gmail. Elle ne dépend pas de l’envoi SMTP Rifty. Un Gmail peut aussi servir d’adresse pour un mot de passe Rifty, sous réserve du service SMTP ci-dessus.
 

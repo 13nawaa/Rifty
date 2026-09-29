@@ -7,6 +7,6 @@ window.RiftyAuthConfig={
   url:'https://yildqtltyqnhazufegro.supabase.co',
   publishableKey:'sb_publishable_7eRTt7FmTIqWKZEr-BKZ_Q_863mQaVh',
   redirectUrl:'https://13nawaa.github.io/Rifty/',
-  googleEnabled:false,
+  googleEnabled:true,
   emailDeliveryReady:false
 };

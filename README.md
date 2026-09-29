@@ -4,7 +4,7 @@ Cette version est prête à déposer à la racine d’un dépôt GitHub Pages. `
 
 ## Comptes et synchronisation
 
-Rifty est relié au projet Supabase Rifty. La connexion e-mail, la récupération du mot de passe et les données privées sont configurées. L’envoi des e-mails au public attend encore un service SMTP : voir `AUTH_SETUP.md`. Google reste masqué tant que son fournisseur OAuth n’est pas activé. Les clés présentes dans `auth-config.js` sont publiques ; aucun secret serveur ne doit être ajouté au site.
+Rifty est relié au projet Supabase Rifty. La connexion Google est active. La connexion e-mail, la récupération du mot de passe et les données privées sont configurées ; l’envoi des e-mails au public attend encore un service SMTP : voir `AUTH_SETUP.md`. Les clés présentes dans `auth-config.js` sont publiques ; aucun secret serveur n’est ajouté au site.
 
 ## Personnalisation
 
