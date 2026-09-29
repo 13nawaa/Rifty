@@ -1,0 +1,14 @@
+html{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent}
+button,a{-webkit-tap-highlight-color:transparent}
+.rifty-app-install{display:grid;gap:10px;margin-top:20px}
+.rifty-app-install .primary{width:100%;justify-content:center}
+#rifty-install-status{min-height:18px;margin:0;text-align:center;color:var(--muted);font-size:11px;line-height:1.5}
+#rifty-install-status.install-hint{color:var(--blue);animation:installHint .8s ease}
+.beta-open-dot{width:7px;height:7px;border-radius:50%;background:#34c759;box-shadow:0 0 0 4px color-mix(in srgb,#34c759 14%,transparent)}
+@keyframes installHint{50%{transform:translateY(-2px)}}
+@media(display-mode:standalone){
+  body{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+  header{position:sticky;top:0;z-index:50;backdrop-filter:saturate(180%) blur(18px)}
+  .home-app-promo{display:none}
+}
+@media(prefers-reduced-motion:reduce){#rifty-install-status.install-hint{animation:none}}

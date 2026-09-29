@@ -1,0 +1,46 @@
+{
+  "id": "/Rifty/",
+  "name": "Rifty — Guitare électrique",
+  "short_name": "Rifty",
+  "description": "Créateurs, outils, formations et suivi de pratique pour progresser à la guitare électrique.",
+  "lang": "fr",
+  "start_url": "./?source=app",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "any",
+  "background_color": "#f8fafc",
+  "theme_color": "#007AFF",
+  "categories": ["education", "music", "lifestyle"],
+  "icons": [
+    {
+      "src": "assets/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Découvrir",
+      "short_name": "Découvrir",
+      "url": "./?source=app#discover"
+    },
+    {
+      "name": "Outils",
+      "short_name": "Outils",
+      "url": "./?source=app#tools"
+    },
+    {
+      "name": "Mon profil",
+      "short_name": "Profil",
+      "url": "./?source=app#profile"
+    }
+  ]
+}

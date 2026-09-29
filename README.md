@@ -2,6 +2,12 @@
 
 Cette version est prête à déposer à la racine d’un dépôt GitHub Pages. `index.html`, les scripts, les feuilles de style et les dossiers `assets/` et `avatars/` doivent rester ensemble. Aucun serveur applicatif, compte ni installation n’est nécessaire. Le site est publié sur https://13nawaa.github.io/Rifty/.
 
+## Application Rifty — bêta ouverte
+
+Rifty s’installe sur Windows comme une application de bureau via Microsoft Edge ou Google Chrome. Ouvrez https://13nawaa.github.io/Rifty/, cliquez sur « Installer la bêta » dans la page ou le profil, puis confirmez l’installation du navigateur. Si le navigateur n’affiche pas l’invite, ouvrez son menu ⋯ puis « Applications » → « Installer Rifty ». L’application ouvre le même site dans sa propre fenêtre, conserve la session et installe ses mises à jour automatiquement. Une partie de l’interface et les portraits sont mis en cache pour un démarrage rapide et un accès hors connexion. Les connexions, contenus vidéo communautaires et services en ligne nécessitent Internet.
+
+Cette première bêta n’ajoute pas encore de fonctions réservées à l’application. Les futurs avantages pourront arriver par les mises à jour de Rifty.
+
 ## Comptes et synchronisation
 
 Rifty est relié au projet Supabase Rifty. La connexion Google est active. La connexion e-mail, la récupération du mot de passe et les données privées sont configurées ; l’envoi des e-mails au public attend encore un service SMTP : voir `AUTH_SETUP.md`. Les clés présentes dans `auth-config.js` sont publiques ; aucun secret serveur n’est ajouté au site.

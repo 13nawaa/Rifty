@@ -10,6 +10,7 @@
 - Profils, favoris et missions dans `rifty_user_data`, avec RLS limitée au propriétaire et droits explicites.
 - Table et stockage du défi communautaire configurés ; les vidéos publiées sont publiques.
 - SDK JavaScript fixé à `2.117.2`.
+- La bêta installable de Rifty est publiée comme application Web progressive. L’installation Windows utilise Edge ou Chrome ; le manifeste, les icônes et le service worker sont dans la racine publiée.
 - Réglages du profil réunis dans une fenêtre accessible par la roue dentée ; les modifications sont appliquées avec « Enregistrer ».
 - Pseudos réservés dans `rifty_handles`, uniques sans distinction majuscules/minuscules. 3 à 24 lettres ASCII, chiffres ou `_`. La base impose l’unicité et la propriété ; la communauté utilise le pseudo réservé.
 
