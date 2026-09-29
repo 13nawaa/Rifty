@@ -1,8 +1,8 @@
 (()=>{
   const installButton=document.getElementById('install-rifty-app');
-  const status=document.getElementById('rifty-install-status');
   let installPrompt=null;
   const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+  const showMessage=text=>{if(typeof showToast==='function')showToast(text)};
   const card=document.querySelector('.rifty-app-card');
   if(card){
     card.querySelector('.rifty-app-badge').textContent='RIFTY APP · BÊTA OUVERTE';
@@ -12,18 +12,10 @@
   }
 
   function setState(){
-    if(!installButton||!status)return;
-    if(standalone()){
-      installButton.disabled=true;
-      installButton.textContent='Rifty est installée';
-      status.textContent='La bêta tourne dans sa propre fenêtre. Les mises à jour arrivent automatiquement.';
-      return;
-    }
-    installButton.disabled=false;
-    installButton.textContent=installPrompt?'Installer la bêta Windows':'Comment installer Rifty';
-    status.textContent=installPrompt
-      ?'Installation gratuite · Windows 10 et 11 · mises à jour automatiques'
-      :'Dans Edge ou Chrome : menu ⋯, puis Applications > Installer Rifty.';
+    if(!installButton)return;
+    const installed=standalone();
+    installButton.disabled=installed;
+    installButton.textContent=installed?'Rifty est installée':'Installer Rifty';
   }
 
   addEventListener('beforeinstallprompt',event=>{
@@ -35,15 +27,13 @@
   addEventListener('appinstalled',()=>{
     installPrompt=null;
     setState();
-    if(typeof showToast==='function')showToast('Rifty est installée. Retrouvez-la dans le menu Démarrer.');
+    showMessage('Rifty est installée. Retrouvez-la dans le menu Démarrer.');
   });
 
   installButton?.addEventListener('click',async()=>{
     if(standalone())return;
     if(!installPrompt){
-      setState();
-      status?.classList.add('install-hint');
-      setTimeout(()=>status?.classList.remove('install-hint'),900);
+      showMessage('Ce navigateur ne propose pas l’installation directe. Ouvrez le menu ⋯ puis Applications → Installer Rifty.');
       return;
     }
     const prompt=installPrompt;
