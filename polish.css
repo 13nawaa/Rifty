@@ -2,7 +2,7 @@
 @font-face{font-family:Rifty Signature;src:url('assets/fonts/Damion-Regular.ttf') format('truetype');font-style:normal;font-weight:400;font-display:swap}
 .brand-copy>span,footer .brand{font-family:'Rifty Signature',cursive;font-weight:400;font-synthesis:none}
 .brand-copy>span{font-size:37px;letter-spacing:-.8px;line-height:1.05}
-.brand-copy{align-items:center;gap:3px}.brand-copy small{display:block;line-height:1.2;padding-left:2px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;margin-top:0;letter-spacing:2px;font-size:8px}
+.brand-copy{align-items:flex-start;gap:3px}.brand-copy small{display:block;line-height:1.2;padding-left:2px;text-align:left;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;margin-top:0;letter-spacing:2px;font-size:8px}
 footer .brand{font-size:32px;letter-spacing:-.6px}
 .top-tabs{gap:5px}.top-tabs button{font-size:13px;letter-spacing:0;line-height:1.3;padding:10px 12px}
 .top-tabs button.active:after{left:20%;right:20%;bottom:-5px;height:3px;box-shadow:0 0 12px color-mix(in srgb,var(--blue) 35%,transparent)}
