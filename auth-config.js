@@ -4,7 +4,9 @@
   Ne placez jamais la clé service_role ou le secret Google dans ce fichier.
 */
 window.RiftyAuthConfig={
-  url:'YOUR_SUPABASE_URL',
-  publishableKey:'YOUR_SUPABASE_PUBLISHABLE_KEY',
-  redirectUrl:''
+  url:'https://yildqtltyqnhazufegro.supabase.co',
+  publishableKey:'sb_publishable_7eRTt7FmTIqWKZEr-BKZ_Q_863mQaVh',
+  redirectUrl:'https://13nawaa.github.io/Rifty/',
+  googleEnabled:false,
+  emailDeliveryReady:false
 };

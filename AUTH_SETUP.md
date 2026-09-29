@@ -1,49 +1,36 @@
-# Activer les comptes Rifty
+# Comptes Rifty — état du 29 septembre 2026
 
-L’interface et la synchronisation sont déjà intégrées. Il reste à relier le site à un projet Supabase.
+## Déjà configuré
 
-## 1. Créer le projet
+- Projet Supabase **Rifty**, région Paris (`eu-west-3`), référence `yildqtltyqnhazufegro`.
+- Clé publique publishable et URL du projet dans `auth-config.js`. Aucune clé secrète dans le site.
+- Authentification par e-mail activée ; confirmation d’adresse obligatoire ; minimum de 8 caractères.
+- Site URL et retour autorisé : `https://13nawaa.github.io/Rifty/`.
+- Inscription, connexion, renvoi de confirmation, récupération du mot de passe et déconnexion dans `auth.js`.
+- Profils, favoris et missions dans `rifty_user_data`, avec RLS limitée au propriétaire et droits explicites.
+- Table et stockage du défi communautaire configurés ; les vidéos publiées sont publiques.
+- SDK JavaScript fixé à `2.117.2`.
 
-Créez un projet sur `https://supabase.com`, puis ouvrez **Project Settings → API**.
+## Étape restante : envoi des e-mails au public
 
-Copiez dans `auth-config.js` :
+**Le serveur SMTP de démonstration Supabase ne livre qu’aux adresses membres de l’organisation. Les inscriptions publiques et la récupération par e-mail ne sont donc pas encore prêtes pour tous les visiteurs.**
 
-- **Project URL** dans `url` ;
-- **Publishable key** ou l’ancienne clé publique `anon` dans `publishableKey`.
+1. Choisir et ouvrir un compte chez un service SMTP (par exemple Brevo ou Resend).
+2. Vérifier l’adresse d’expédition ou le domaine selon les exigences du fournisseur.
+3. Saisir les paramètres SMTP directement dans Supabase : https://supabase.com/dashboard/project/yildqtltyqnhazufegro/auth/smtp . Ne jamais les ajouter au dépôt GitHub.
+4. Tester une inscription avec une adresse extérieure à l’équipe, confirmer le compte, se déconnecter, se reconnecter, puis tester « Mot de passe oublié ».
+5. Une fois ces tests réussis, passer `emailDeliveryReady` à `true` dans `auth-config.js` et republier le site pour retirer la mention de phase de test.
 
-Ces deux valeurs sont publiques et peuvent être utilisées dans un site web. Ne copiez jamais la clé `service_role` dans le site.
+Documentation : https://supabase.com/docs/guides/auth/auth-smtp
 
-## 2. Activer la synchronisation
+## Google
 
-Dans **SQL Editor**, exécutez tout le contenu de `supabase-schema.sql`. Il crée les données privées du profil, la table du défi communautaire et le bucket des vidéos. Les règles Row Level Security garantissent que chaque utilisateur ne peut modifier que ses propres données et publier que dans son propre dossier.
+Google est masqué tant que son fournisseur n’est pas configuré. Un Gmail peut déjà être utilisé comme adresse e-mail avec un mot de passe Rifty, sous réserve de l’envoi SMTP ci-dessus. Le bouton de connexion Google nécessite un client OAuth Google, à configurer uniquement dans Supabase ; puis `googleEnabled: true` dans le site.
 
-## 3. Configurer les URL
+## Données et vérifications
 
-Dans **Authentication → URL Configuration** :
+Un profil cloud existant est restauré à la connexion. Les données invitées ne l’écrasent pas. Un nouveau compte sans profil cloud peut reprendre les données locales. Les caches de comptes sont séparés ; les modifications non synchronisées restent dans le cache du compte correspondant. Une déconnexion nettoie le profil affiché et les avis privés locaux.
 
-- placez l’adresse GitHub Pages finale dans **Site URL** ;
-- ajoutez la même adresse dans **Redirect URLs** ;
-- ajoutez temporairement `http://127.0.0.1:4173/**` pour les tests locaux.
+Vérifications effectuées : scénarios de connexion simulés, récupération conservée lors d’un rafraîchissement de session, isolation de deux utilisateurs par RLS (transaction de test annulée), refus des lectures anonymes de profils, lecture publique du fil communautaire. Aucune alerte de sécurité dans Supabase Advisor au moment du contrôle. La livraison réelle d’e-mails et le parcours complet de confirmation restent à tester après configuration SMTP.
 
-Vous pouvez aussi renseigner l’adresse finale dans `redirectUrl` de `auth-config.js`. Si elle reste vide, Rifty utilise automatiquement la page courante.
-
-## 4. Connexion par e-mail
-
-Dans **Authentication → Providers**, laissez **Email** activé. La confirmation de l’adresse est recommandée. Pour un site public, configurez ensuite un SMTP personnalisé afin d’assurer une bonne délivrabilité des e-mails.
-
-## 5. Connexion Google
-
-Dans Google Auth Platform, créez un client OAuth de type **Web application** :
-
-- ajoutez l’origine de votre site GitHub Pages aux origines JavaScript autorisées ;
-- ajoutez comme URI de redirection l’URL de callback affichée dans la page Google du tableau de bord Supabase, généralement `https://VOTRE_PROJECT_REF.supabase.co/auth/v1/callback`.
-
-Copiez le Client ID et le Client Secret Google directement dans **Supabase → Authentication → Providers → Google**, puis activez le fournisseur. Le Client Secret Google ne doit jamais être ajouté aux fichiers du site.
-
-## Fonctionnement des données
-
-Le profil, les favoris, les missions et les XP locaux sont fusionnés avec le compte lors de la première connexion. Les changements suivants sont synchronisés automatiquement. À la déconnexion, les données personnelles synchronisées sont retirées de l’appareil et restent disponibles dans le compte.
-
-Les rappels de pratique restent propres à chaque appareil. Les notifications système nécessitent le site publié en HTTPS et l’autorisation explicite du visiteur. Sans cette autorisation, Rifty affiche le rappel dans l’application lorsqu’elle est ouverte.
-
-Le défi communautaire accepte une vidéo MP4, WebM ou MOV de 30 secondes et 25 Mo maximum. Une seule contribution est autorisée par compte et par défi hebdomadaire. Les vidéos, les pseudos et les légendes sont publics dans la section Communauté.
+Utiliser le site HTTPS publié, pas une URL `file://`, pour les comptes et les liens de confirmation.

@@ -1,10 +1,10 @@
 # Rifty — site statique
 
-Cette version est prête à déposer à la racine d’un dépôt GitHub Pages. `index.html`, les scripts, les feuilles de style et les dossiers `assets/` et `avatars/` doivent rester ensemble. Aucun serveur applicatif, compte ni installation n’est nécessaire. La publication reste à votre charge.
+Cette version est prête à déposer à la racine d’un dépôt GitHub Pages. `index.html`, les scripts, les feuilles de style et les dossiers `assets/` et `avatars/` doivent rester ensemble. Aucun serveur applicatif, compte ni installation n’est nécessaire. Le site est publié sur https://13nawaa.github.io/Rifty/.
 
 ## Comptes et synchronisation
 
-Rifty intègre la création de compte par Google ou par e-mail et mot de passe avec Supabase Auth. Suivez `AUTH_SETUP.md`, renseignez les deux valeurs publiques dans `auth-config.js`, puis exécutez `supabase-schema.sql` dans le projet Supabase. Ce schéma active aussi le défi communautaire et le stockage protégé des vidéos. Sans cette configuration, le site reste utilisable en mode local et indique clairement que la connexion doit être activée.
+Rifty est relié au projet Supabase Rifty. La connexion e-mail, la récupération du mot de passe et les données privées sont configurées. L’envoi des e-mails au public attend encore un service SMTP : voir `AUTH_SETUP.md`. Google reste masqué tant que son fournisseur OAuth n’est pas activé. Les clés présentes dans `auth-config.js` sont publiques ; aucun secret serveur ne doit être ajouté au site.
 
 ## Personnalisation
 

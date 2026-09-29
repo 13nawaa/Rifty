@@ -8,19 +8,19 @@ alter table public.rifty_user_data enable row level security;
 
 drop policy if exists "Users can read their Rifty data" on public.rifty_user_data;
 create policy "Users can read their Rifty data"
-on public.rifty_user_data for select
-using (auth.uid() = user_id);
+on public.rifty_user_data for select to authenticated
+using ((select auth.uid()) = user_id);
 
 drop policy if exists "Users can create their Rifty data" on public.rifty_user_data;
 create policy "Users can create their Rifty data"
-on public.rifty_user_data for insert
-with check (auth.uid() = user_id);
+on public.rifty_user_data for insert to authenticated
+with check ((select auth.uid()) = user_id);
 
 drop policy if exists "Users can update their Rifty data" on public.rifty_user_data;
 create policy "Users can update their Rifty data"
-on public.rifty_user_data for update
-using (auth.uid() = user_id)
-with check (auth.uid() = user_id);
+on public.rifty_user_data for update to authenticated
+using ((select auth.uid()) = user_id)
+with check ((select auth.uid()) = user_id);
 
 create table if not exists public.rifty_challenge_posts (
   id uuid primary key default gen_random_uuid(),
@@ -38,18 +38,20 @@ alter table public.rifty_challenge_posts enable row level security;
 
 drop policy if exists "Challenge posts are public" on public.rifty_challenge_posts;
 create policy "Challenge posts are public"
-on public.rifty_challenge_posts for select
+on public.rifty_challenge_posts for select to anon, authenticated
 using (true);
 
 drop policy if exists "Users can publish their challenge post" on public.rifty_challenge_posts;
 create policy "Users can publish their challenge post"
-on public.rifty_challenge_posts for insert
-with check (auth.uid() = user_id and xp_awarded = 50);
+on public.rifty_challenge_posts for insert to authenticated
+with check ((select auth.uid()) = user_id and xp_awarded = 50
+  and split_part(video_path, '/', 1) = (select auth.uid())::text
+  and exists (select 1 from storage.objects where bucket_id = 'rifty-challenges' and name = video_path));
 
 drop policy if exists "Users can delete their challenge post" on public.rifty_challenge_posts;
 create policy "Users can delete their challenge post"
-on public.rifty_challenge_posts for delete
-using (auth.uid() = user_id);
+on public.rifty_challenge_posts for delete to authenticated
+using ((select auth.uid()) = user_id);
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('rifty-challenges', 'rifty-challenges', true, 26214400, array['video/mp4','video/webm','video/quicktime'])
@@ -60,7 +62,7 @@ on conflict (id) do update set
 
 drop policy if exists "Challenge videos are public" on storage.objects;
 create policy "Challenge videos are public"
-on storage.objects for select
+on storage.objects for select to anon, authenticated
 using (bucket_id = 'rifty-challenges');
 
 drop policy if exists "Users can upload their challenge video" on storage.objects;
@@ -68,7 +70,7 @@ create policy "Users can upload their challenge video"
 on storage.objects for insert to authenticated
 with check (
   bucket_id = 'rifty-challenges'
-  and (storage.foldername(name))[1] = auth.uid()::text
+  and (storage.foldername(name))[1] = (select auth.uid())::text
 );
 
 drop policy if exists "Users can delete their challenge video" on storage.objects;
@@ -76,5 +78,14 @@ create policy "Users can delete their challenge video"
 on storage.objects for delete to authenticated
 using (
   bucket_id = 'rifty-challenges'
-  and (storage.foldername(name))[1] = auth.uid()::text
+  and (storage.foldername(name))[1] = (select auth.uid())::text
 );
+
+-- Explicit Data API grants; RLS restricts private rows to their owner.
+revoke all on public.rifty_user_data from anon, authenticated;
+grant select, insert, update on public.rifty_user_data to authenticated;
+revoke all on public.rifty_challenge_posts from anon, authenticated;
+grant select on public.rifty_challenge_posts to anon, authenticated;
+grant insert, delete on public.rifty_challenge_posts to authenticated;
+create index if not exists rifty_challenge_posts_user_idx on public.rifty_challenge_posts(user_id);
+create index if not exists rifty_challenge_posts_feed_idx on public.rifty_challenge_posts(challenge_slug, created_at desc);
