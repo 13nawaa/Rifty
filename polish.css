@@ -1,0 +1,39 @@
+/* Rifty signature and motion. Body copy keeps the original system typeface. */
+@font-face{font-family:Rifty Signature;src:url('assets/fonts/Damion-Regular.ttf') format('truetype');font-style:normal;font-weight:400;font-display:swap}
+.brand-copy>span,footer .brand{font-family:'Rifty Signature',cursive;font-weight:400;font-synthesis:none}
+.brand-copy>span{font-size:37px;letter-spacing:-.8px;line-height:1.05}
+.brand-copy{align-items:center;gap:3px}.brand-copy small{display:block;line-height:1.2;padding-left:2px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;margin-top:0;letter-spacing:2px;font-size:8px}
+footer .brand{font-size:32px;letter-spacing:-.6px}
+.top-tabs{gap:5px}.top-tabs button{font-size:13px;letter-spacing:0;line-height:1.3;padding:10px 12px}
+.top-tabs button.active:after{left:20%;right:20%;bottom:-5px;height:3px;box-shadow:0 0 12px color-mix(in srgb,var(--blue) 35%,transparent)}
+.top-tabs button{transition:color .18s,background .18s,transform .18s}.top-tabs button:active{transform:scale(.96)}
+/* Remove baseline offsets and the default button padding from icon-only controls. */
+.ui-icon,.brand-icon{display:block;flex-shrink:0;aspect-ratio:1/1}
+[data-icon]{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;line-height:0}
+.heart,.icon-btn,.close,#clear,.photo-upload,.verified,.play,.tool-icon,.sheet-icon,.mission-symbol,.achievement>span,.note-symbol{display:inline-grid;place-items:center;padding:0;line-height:1;flex-shrink:0}
+.detail-heart{display:inline-flex;padding:8px 13px;line-height:1.4}
+.heart>.ui-icon,.close>.ui-icon,#clear>.ui-icon{width:17px;height:17px;margin:0}
+#theme-toggle{position:relative}.sun,.moon{grid-area:1/1;align-items:center;justify-content:center;line-height:0}.sun{display:flex}.moon{display:none}[data-theme=dark] .sun{display:none}[data-theme=dark] .moon{display:flex}
+.tool-icon .ui-icon,.sheet-icon .ui-icon{width:22px;height:22px;margin:0}
+.platforms>span,.level,.social-links a,.resource-card a,.account-button,.eyebrow{display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.level .dot{margin:0;flex:none}.verified .ui-icon{width:10px;height:10px}.search>svg{width:19px;height:19px;flex:none}
+.search{height:56px;padding-right:7px;gap:12px;transition:box-shadow .2s,border-color .2s}
+.search:focus-within{outline:0;border-color:var(--blue);box-shadow:0 0 0 4px color-mix(in srgb,var(--blue) 10%,transparent)}
+.search .search-suggest{display:inline-flex;align-items:center;justify-content:center;gap:8px;flex:none;width:auto;height:40px;padding:0 15px;border-radius:10px;background:var(--blue-soft);border:1px solid color-mix(in srgb,var(--blue) 20%,var(--line));color:var(--blue);font-size:12px;white-space:nowrap}
+.search .search-suggest .ui-icon{width:16px;height:16px;color:inherit}.search-suggest:hover{background:var(--blue);color:white}
+.resource-level-filter{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:0 0 24px;font-size:12px;color:var(--muted)}
+.resource-level-filter select{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--line);padding:10px 32px 10px 13px;border-radius:10px;cursor:pointer}
+.resource-levels{display:flex;flex-wrap:wrap;gap:6px;margin:5px 0 14px}.resource-card .resource-prerequisites{padding:12px;background:var(--surface2);border-radius:11px;font-size:12px;line-height:1.55;margin-bottom:18px}.resource-prerequisites strong{display:block;font-size:10px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:5px;color:var(--text)}
+.resource-top{gap:8px}.free-badge{font-size:9px;text-transform:uppercase}.resource-top>span:last-child{white-space:nowrap}.resource-card a .ui-icon{width:13px;height:13px}.resource-empty{grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)}
+.new-creator{margin-left:auto;font-size:10px;font-weight:700;color:var(--blue);background:var(--blue-soft);padding:5px 8px;border-radius:6px}
+.card,.resource-card{transition:transform .22s cubic-bezier(.2,.7,.2,1),box-shadow .22s,border-color .22s}
+@media(hover:hover){.card:hover,.resource-card:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--blue) 30%,var(--line));box-shadow:0 12px 32px color-mix(in srgb,var(--blue) 7%,transparent)}.card:hover .open{background:var(--blue);color:white}}
+.primary,.secondary,.open,.heart,.chips button,.segments button,.search-suggest{transition:background .18s,color .18s,transform .18s,box-shadow .18s}
+.primary:active,.secondary:active,.heart:active,.chips button:active{transform:scale(.96)}
+.heart.saved .ui-icon{animation:heart-settle .3s ease-out}@keyframes heart-settle{50%{transform:scale(1.2)}}
+.view.active{animation:view-arrive .28s ease-out}@keyframes view-arrive{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+dialog[open]{animation:sheet-arrive .24s cubic-bezier(.2,.7,.2,1)}@keyframes sheet-arrive{from{opacity:0;transform:translateY(15px) scale(.98)}to{opacity:1;transform:none}}
+button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid color-mix(in srgb,var(--blue) 55%,transparent);outline-offset:3px}
+@media(max-width:1050px){.top-tabs{padding-inline:18px}.top-tabs button{font-size:13px}.top-tabs button.active:after{bottom:0}}
+@media(max-width:680px){.brand-copy>span{font-size:33px}.top-tabs button{font-size:12px;padding:12px 10px}.search{display:grid;grid-template-columns:19px minmax(0,1fr) 25px;height:auto;padding:12px;gap:10px}.search input{width:100%;font-size:14px}.search .search-suggest{grid-column:1/-1;width:100%;margin-top:2px}.search>#clear{grid-column:3;grid-row:1}.resource-level-filter{justify-content:flex-start}.resource-card{min-width:0}.resource-card>div:last-child{gap:8px}.search-suggest span{display:inline}.hero h1{overflow-wrap:normal}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.card:hover,.resource-card:hover{transform:none}}

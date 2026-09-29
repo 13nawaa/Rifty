@@ -20,3 +20,11 @@ Rifty intègre la création de compte par Google ou par e-mail et mot de passe a
 Icônes d’interface : Lucide, licence ISC reproduite dans `assets/LUCIDE-LICENSE.txt`. Logos monochromes YouTube et TikTok : géométrie Simple Icons v15 (CC0), sans redessin ni déformation ; marques détenues par leurs propriétaires. Sources : https://github.com/simple-icons/simple-icons et https://lucide.dev. Les drapeaux signalent la langue du contenu, pas la nationalité.
 
 Les recommandations et avis privés restent indépendants des plateformes.
+
+## Patch du 29 septembre 2026
+
+- Police de signature Damion embarquée pour le logo uniquement (licence SIL OFL dans assets/fonts/).
+- Icônes recentrées, interactions légères et respect de la préférence système de réduction des animations.
+- Bouton « Suggérer un créateur » intégré à la recherche ; les propositions restent locales.
+- 17 créateurs, dont 11 francophones ; liens et sources dans CONTENT_SOURCES.md.
+- 10 ressources de formation, avec niveaux conseillés, prérequis et filtre par niveau.

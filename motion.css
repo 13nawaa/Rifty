@@ -1,0 +1,57 @@
+/* Short, interruptible transitions: navigation and controls stay responsive. */
+:root{--ease-out:cubic-bezier(.22,1,.36,1);--motion-fast:160ms;--motion-normal:260ms}
+html{scrollbar-gutter:stable;scroll-padding-top:125px}
+body:has(dialog[open]){overflow:hidden}
+dialog{overscroll-behavior:contain}
+
+.view.active{animation:view-arrive 300ms var(--ease-out)}
+.top-tabs button::after{content:'';position:absolute;left:20%;right:20%;bottom:-5px;height:3px;border-radius:2px;background:var(--blue);opacity:0;transform:scaleX(.35);transition:transform 240ms var(--ease-out),opacity 160ms ease}
+.top-tabs button.active::after{opacity:1;transform:scaleX(1)}
+.top-tabs button,.resource-filters button,.icon-btn,.account-button,.tuner-notes button,.text-button,.upload-button,.close,#clear{
+  transition:background-color var(--motion-fast) ease,color var(--motion-fast) ease,border-color var(--motion-fast) ease,box-shadow var(--motion-fast) ease,transform var(--motion-fast) var(--ease-out);
+}
+.segments button{transition:background-color 180ms ease,color 180ms ease,box-shadow 180ms ease,transform 180ms var(--ease-out)}
+:is(.open,.resource-filters button,.icon-btn,.account-button,.tuner-notes button,.close,#clear,.search-suggest):active:not(:disabled){transform:scale(.96)}
+.segments button:active{transform:scale(.98)}
+
+/* A small fade when results change, without hiding content until scroll. */
+.creator-grid>.card,.resource-grid>.resource-card{animation:results-arrive 240ms var(--ease-out) backwards}
+.creator-grid>.card:nth-child(3n+2),.resource-grid>.resource-card:nth-child(3n+2){animation-delay:25ms}
+.creator-grid>.card:nth-child(3n),.resource-grid>.resource-card:nth-child(3n){animation-delay:50ms}
+@keyframes results-arrive{from{opacity:0}to{opacity:1}}
+.card,.resource-card{transition:transform 260ms var(--ease-out),box-shadow 260ms ease,border-color 180ms ease,background-color 220ms ease}
+.tool-card,.profile-panel,.discovery,.rifty-app-banner{transition:background-color 220ms ease,border-color 220ms ease,box-shadow 220ms ease}
+.mission-row,.mission-symbol,.achievement>span{transition:background-color 200ms ease,color 200ms ease,border-color 200ms ease}
+.mission-row input{transition:background-color 160ms ease,border-color 160ms ease,transform 160ms var(--ease-out)}
+.mission-row input:active{transform:scale(.9)}
+.open .ui-icon,.resource-card a .ui-icon,.social-links a .ui-icon{transition:transform 200ms var(--ease-out)}
+@media(hover:hover) and (pointer:fine){
+  .open:hover .ui-icon,.resource-card a:hover .ui-icon,.social-links a:hover .ui-icon{transform:translate(2px,-2px)}
+  .icon-btn:hover,.close:hover,#clear:hover{background:var(--blue-soft);color:var(--blue)}
+  .mission-row:hover{background:color-mix(in srgb,var(--blue) 3%,transparent)}
+}
+@media(hover:none){.card:hover{transform:none}}
+dialog :is(input,textarea),.profile-fields :is(input,select),.resource-level-filter select{
+  transition:border-color 180ms ease,box-shadow 180ms ease,background-color 180ms ease;
+}
+dialog :is(input,textarea):focus-visible,.profile-fields :is(input,select):focus-visible{
+  border-color:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 12%,transparent);
+}
+#toast{transition:opacity 180ms ease,transform 240ms var(--ease-out)}
+
+/* Native dialog entry AND exit; older browsers keep the existing entry animation. */
+@supports (transition-behavior:allow-discrete){
+  dialog{opacity:0;transform:translateY(10px) scale(.985);transition:opacity 180ms ease,transform 220ms var(--ease-out),display 220ms allow-discrete,overlay 220ms allow-discrete}
+  dialog[open]{animation:none;opacity:1;transform:none}
+  dialog::backdrop{opacity:0;transition:opacity 180ms ease,display 220ms allow-discrete,overlay 220ms allow-discrete}
+  dialog[open]::backdrop{opacity:1}
+  @starting-style{
+    dialog[open]{opacity:0;transform:translateY(10px) scale(.985)}
+    dialog[open]::backdrop{opacity:0}
+  }
+}
+@media(max-width:1180px){.top-tabs button::after{bottom:0}}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .card:hover,.resource-card:hover,.open:hover .ui-icon,.resource-card a:hover .ui-icon,.social-links a:hover .ui-icon{transform:none}
+}
