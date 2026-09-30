@@ -46,10 +46,17 @@
     byId('auth-sync-title').textContent=connected?'Progression synchronisée':'Synchronisation en attente';
   }
   function accountName(account){const profile=parse('accord-profile',{});return (typeof profile.nickname==='string'&&profile.nickname.trim())||account.user_metadata?.full_name||account.user_metadata?.name||account.email?.split('@')[0]||'Guitariste'}
+  function drawAccountAvatar(account){
+    const target=byId('auth-avatar'),profile=parse('accord-profile',{});
+    let src=typeof profile.photo==='string'&&/^data:image\/(?:jpeg|png|webp);base64,[a-z\d+/=]+$/i.test(profile.photo)?profile.photo:'';
+    if(!src){for(const value of [account.user_metadata?.avatar_url,account.user_metadata?.picture]){try{const url=new URL(value);if(url.protocol==='https:'){src=url.href;break}}catch{}}}
+    if(!src){target.innerHTML=uiIcon('user-round');return}
+    const image=document.createElement('img');image.src=src;image.alt='';image.referrerPolicy='no-referrer';target.replaceChildren(image);
+  }
   function drawSession(){
-    const account=session?.user;guest.hidden=!!account||recovering;userPanel.hidden=!account||recovering;recovery.hidden=!recovering;
+    const account=session?.user;guest.hidden=!!account||recovering;userPanel.hidden=!account||recovering;
     byId('account-label').textContent=account?accountName(account):'Se connecter';byId('account-button').classList.toggle('signed-in',!!account);
-    if(account){byId('auth-user-name').textContent=accountName(account);byId('auth-user-email').textContent=account.email||'Compte Rifty';byId('auth-avatar').innerHTML=uiIcon('user-round')}
+    if(account){byId('auth-user-name').textContent=accountName(account);byId('auth-user-email').textContent=account.email||'Compte Rifty';drawAccountAvatar(account)}
   }
   async function pushCloud(){
     if(!client||!session||!ready)return false;
@@ -104,7 +111,7 @@
   byId('resend-confirmation').onclick=()=>runAction(async()=>{const email=emailValue()||confirmationEmail;if(!email)return;const {error}=await client.auth.resend({type:'signup',email,options:{emailRedirectTo:redirectUrl()}});if(error)throw error;message('Un nouveau lien a été demandé. Pensez à vérifier vos courriers indésirables.','success')});
   recovery.onsubmit=e=>{e.preventDefault();runAction(async()=>{const {error}=await client.auth.updateUser({password:byId('auth-new-password').value});if(error)throw error;byId('auth-new-password').value='';recovering=false;drawSession();message('Mot de passe mis à jour.','success')})};
   byId('auth-signout').onclick=()=>runAction(async()=>{clearTimeout(syncTimer);if(dirty)await pushCloud();const {error}=await client.auth.signOut({scope:'local'});if(error)throw error;message('Vous êtes déconnecté.','success')});
-  document.addEventListener('rifty:data-change',queuePush);document.addEventListener('accord:favorites',queuePush);
+  document.addEventListener('rifty:data-change',queuePush);document.addEventListener('rifty:data-change',()=>{if(session)drawAccountAvatar(session.user)});document.addEventListener('accord:favorites',queuePush);
   window.addEventListener('online',()=>{if(session){if(ready)queuePush();else pullCloud(epoch)}});
   window.RiftyAuth={configured:!!client,client,get session(){return session},get ready(){return ready},get nickname(){return nickname},open:openDialog};
   document.addEventListener('rifty:nickname-saved',e=>{if(e.detail.userId===session?.user.id){nickname=e.detail.nickname;drawSession();document.dispatchEvent(new Event('rifty:profile-ready'))}});
