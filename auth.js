@@ -47,8 +47,9 @@
   }
   function accountName(account){const profile=parse('accord-profile',{});return (typeof profile.nickname==='string'&&profile.nickname.trim())||account.user_metadata?.full_name||account.user_metadata?.name||account.email?.split('@')[0]||'Guitariste'}
   function drawAccountAvatar(account){
-    const target=byId('auth-avatar'),profile=parse('accord-profile',{});
-    let src=typeof profile.photo==='string'&&/^data:image\/(?:jpeg|png|webp);base64,[a-z\d+/=]+$/i.test(profile.photo)?profile.photo:'';
+    const target=byId('auth-avatar'),profile=parse('accord-profile',{}),profilePhoto=byId('profile-photo');
+    let src=profilePhoto&&!profilePhoto.hidden?(profilePhoto.currentSrc||profilePhoto.src):'';
+    if(!src)src=typeof profile.photo==='string'&&/^data:image\/(?:jpeg|png|webp);base64,[a-z\d+/=]+$/i.test(profile.photo)?profile.photo:'';
     if(!src){for(const value of [account.user_metadata?.avatar_url,account.user_metadata?.picture]){try{const url=new URL(value);if(url.protocol==='https:'){src=url.href;break}}catch{}}}
     if(!src){target.innerHTML=uiIcon('user-round');return}
     const image=document.createElement('img');image.src=src;image.alt='';image.referrerPolicy='no-referrer';target.replaceChildren(image);
