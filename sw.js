@@ -1,4 +1,4 @@
-const CACHE_NAME='rifty-beta-v4';
+const CACHE_NAME='rifty-beta-v5';
 const APP_SHELL=[
   './',
   './index.html',
